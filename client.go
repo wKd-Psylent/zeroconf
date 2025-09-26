@@ -294,8 +294,15 @@ func (c *client) mainloop(ctx context.Context, params *lookupParams) {
 				// Submit entry to subscriber and cache it.
 				// This is also a point to possibly stop probing actively for a
 				// service entry.
-				params.Entries <- e
-				sentEntries[k] = e
+				if params.Entries != nil {
+					select {
+					case params.Entries <- e:
+						sentEntries[k] = e
+					default:
+						// Channel full or closed; silently drop
+					}
+				}
+
 				if !params.isBrowsing {
 					params.disableProbing()
 				}
