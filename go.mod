@@ -1,4 +1,4 @@
-module github.com/wKd-Psylent/zeroconf
+module github.com/psynthetix/zeroconf
 
 go 1.13
 
